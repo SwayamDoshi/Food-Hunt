@@ -76,7 +76,11 @@ WSGI_APPLICATION = 'Food_Hunt.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': 'Food_Hunt_db',
+        'HOST': 'localhost',
+        'USER': 'root',
+        'PASSWORD':'17012004',
+        'PORT': '3306'
     }
 }
 
