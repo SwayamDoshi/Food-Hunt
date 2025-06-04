@@ -17,8 +17,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from users import views as user_views
+from Restaurant import views as restaurant_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/add-user', user_views.add_user)
+    path('users/add-user', user_views.add_user),
+    path('restaurant/add-restaurant', restaurant_views.add_restaurant)
 ]
