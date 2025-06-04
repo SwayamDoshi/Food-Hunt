@@ -19,6 +19,13 @@ Base_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 Template_dir = os.path.join(Base_directory, 'templates')
 
 
+STATIC_URL = '/static/'
+
+import os
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Food Hunt</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+</head>
+
+<body>
+
+    <div class="navbar">
+        <div class="logo">
+            <a href="/">Food Hunt</a>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/about/">About</a>
+            <div class="dropdown">
+                <a href="#">Signup ▾</a>
+                <div class="dropdown-content">
+                    <a href="/users/add-user">As a User</a>
+                    <a href="/restaurant/add-restaurant">As a Restaurant</a>
+                </div>
+            </div>
+            <a href="/login/">Login</a>
+        </div>
+    </div>
+
+    <!-- Page content here -->
+    <div style="padding: 40px; text-align: center;">
+        <h1>Welcome to Food Hunt</h1>
+        <p>Your one-stop platform for users and restaurants!</p>
+    </div>
+
+</body>
+
+</html>

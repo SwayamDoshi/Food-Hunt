@@ -2,12 +2,10 @@
 <html>
 <head>
     <title>Register User</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f3f3f3;
-            padding: 40px;
-        }
+        
 
         .form-container {
             background: white;
@@ -16,6 +14,7 @@
             width: 400px;
             margin: auto;
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            margin-top: 60px;
         }
 
         .form-container h2 {
@@ -54,6 +53,24 @@
     </style>
 </head>
 <body>
+    <div class="navbar">
+        <div class="logo">
+            <a href="/">Food Hunt</a>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/about/">About</a>
+            <div class="dropdown">
+                <a href="#">Signup ▾</a>
+                <div class="dropdown-content">
+                    <a href="/users/add-user">As a User</a>
+                    <a href="/restaurant/add-restaurant">As a Restaurant</a>
+                </div>
+            </div>
+            <a href="/login/">Login</a>
+        </div>
+    </div>
+
     <div class="form-container">
         <h2>User Registration</h2>
         <form method="POST">

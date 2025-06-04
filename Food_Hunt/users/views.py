@@ -4,3 +4,6 @@ from django.http import HttpResponse
 # Create your views here.
 def add_user(request):
     return render(request, "users/signup.html")
+
+def home(request):
+    return render(request, "home.html")
