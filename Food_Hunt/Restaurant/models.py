@@ -17,4 +17,3 @@ class Restaurant(models.Model):
 
     def _str_(self):
         return self.res_name
-# Create your models here.
