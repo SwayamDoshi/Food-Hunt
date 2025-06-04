@@ -11,9 +11,12 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+Base_directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+Template_dir = os.path.join(Base_directory, 'templates')
 
 
 # Quick-start development settings - unsuitable for production
@@ -56,7 +59,7 @@ ROOT_URLCONF = 'Food_Hunt.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [Template_dir,],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
