@@ -22,6 +22,7 @@ from Restaurant import views as restaurant_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/add-user', user_views.add_user),
-    path('restaurant/add-restaurant', restaurant_views.add_restaurant),
-    path('home/', user_views.home)
+    path('restaurant_signup', restaurant_views.restaurant_signup_view),
+    path('home/', user_views.home),
+    path('restaurant_login',restaurant_views.restaurant_login_view),
 ]
