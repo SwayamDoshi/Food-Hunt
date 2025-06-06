@@ -5,38 +5,31 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
     <style>
-        
-
         .form-container {
             background: white;
-            padding: 20px 30px;
+            padding: 10px 30px;
             border-radius: 10px;
             width: 400px;
             margin: auto;
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
             margin-top: 60px;
         }
-
         .form-container h2 {
             text-align: center;
         }
-
         .form-group {
             margin-bottom: 15px;
         }
-
         label {
             display: block;
             margin-bottom: 5px;
         }
-
         input, select {
             width: 100%;
             padding: 8px;
             border-radius: 5px;
             border: 1px solid #ccc;
         }
-
         button {
             width: 100%;
             background-color: #28a745;
@@ -46,9 +39,9 @@
             border-radius: 5px;
             font-size: 16px;
         }
-
         button:hover {
             background-color: #218838;
+            cursor : pointer
         }
     </style>
 </head>
@@ -76,27 +69,37 @@
         <form method="POST">
             {% csrf_token %}
             <div class="form-group">
-                <label for="user_name">Username:</label>
-                <input type="text" name="user_name" required>
+                <label for="user_name">Username :</label>
+                <input type="text" name="user_name" value="{{ user_name|default:'' }}">
             </div>
 
             <div class="form-group">
-                <label for="user_type">User Type:</label>
-                <input type="text" name="user_type" value="user" disabled required>
+                <input type="text" name="user_type" value="user" hidden>
             </div>
 
             <div class="form-group">
-                <label for="email_ID">Email:</label>
-                <input type="email" name="email_ID" required>
+                <label for="email_ID">Email :</label>
+                <input type="email" name="email_ID" value="{{ email_ID|default:'' }}">
             </div>
 
             <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" name="password" required>
+                <label for="password">Password :</label>
+                <input type="password" name="password" >
+            </div>
+
+            <div class="form-group">
+                <label for="cpassword">Confirm Password :</label>
+                <input type="password" name="cpassword" >
             </div>
 
             <button type="submit">Register</button>
         </form>
+        <br>
+
     </div>
+    {% if msg %}
+        <p style="color: red;text-align: center;">{{msg}}</p>       
+    {% endif %}
+    <br><br>
 </body>
 </html>
