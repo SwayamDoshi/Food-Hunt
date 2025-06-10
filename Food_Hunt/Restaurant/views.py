@@ -58,7 +58,7 @@ def restaurant_signup_view(request):
         except Exception as e:
             return HttpResponse(f"Error occurred: {str(e)}")
 
-    return render(request,'restaurant_login')
+    return render(request, 'restaurant/restaurant_login.html')
 
 def restaurant_login_view(request):
     msg="to login page"
