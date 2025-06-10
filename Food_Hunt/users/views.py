@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Users
 
@@ -19,13 +19,17 @@ def add_user(request):
 
         try:
             if user_name == "" or user_type == "" or email_ID == "" or password == "" or cpassword == "" : 
-                context["msg"] = "Password and confirm Password must be same"
+                context["msg"] = "Please fill all the details"
                 return render(request, "users/signup.html", context)
             
             if password != cpassword : 
                 context["msg"] = "Password and confirm Password must be same"
                 return render(request, "users/signup.html", context)
             
+            if Users.objects.filter(email_ID=email_ID).exists():
+                context["msg"] = "Email already registered"
+                return render(request, "users/signup.html", context)
+
             user = Users(user_name = user_name,user_type = user_type, email_ID = email_ID)
             user.set_password(password)
             user.save()
@@ -35,7 +39,7 @@ def add_user(request):
             context["user_type"] = ""
             context["email_ID"] = ""
 
-            return render(request, "users/signup.html",context)
+            return redirect("/users/login")
         
         except Exception as e:
             context["msg"] = str(e)
@@ -43,6 +47,33 @@ def add_user(request):
     return render(request, "users/signup.html")
 
 
+def login(request):
+    if request.method == "POST":
+        email_ID = request.POST.get('email_ID')
+        password = request.POST.get('password')
+
+        context = {
+            "email_ID": email_ID,
+            "password": password,
+        }
+
+        try:
+            if email_ID == "" or password == "": 
+                context["msg"] = "Email and password required"
+
+            userExist = Users.objects.get(email_ID = email_ID)
+
+            if userExist.check_password(password):
+                return redirect('/')
+            else:
+                context["msg"] = "Invalid Credentials"
+            return render(request, "users/login.html", context)
+        
+        except Users.DoesNotExist:
+            context["msg"] = "User does not exist"
+            return render(request, "users/login.html", context)
+
+    return render(request, "users/login.html")
 
 
 def home(request):
