@@ -3,6 +3,11 @@ from django.http import HttpResponse
 from .models import Restaurant
 from users.models import Users
 from django.contrib.auth.hashers import make_password, check_password
+from datetime import date
+from .models import Menu
+from .models import Thali
+from .models import ThaliItem
+
 
 def restaurant_signup_view(request):
     if request.method == 'POST':
@@ -85,9 +90,13 @@ def login(request):
 
             user = Users.objects.get(email_ID=email_ID, user_type="restaurant")
 
+            # if check_password(password, user.password):
+            #     # return redirect("/landing_page")
+            #     return redirect("/restaurant/landing_page")
             if check_password(password, user.password):
-                # return redirect("/landing_page")
-                return redirect("/restaurant/landing_page")
+                request.session['restaurant_id'] = user.user_id
+                return redirect("res_landing_page")
+
             else:
                 context["msg"] = "Invalid credentials"
                 return render(request, "restaurant/login.html", context)
@@ -101,5 +110,91 @@ def login(request):
 def home(request):
     return render(request, "home.html")
 
+def dashboard(request):
+    if 'restaurant_id' not in request.session:
+        return redirect('restaurant_login')
+
+    restaurant = Users.objects.get(user_id=request.session['restaurant_id'])
+    menus = Menu.objects.filter(restaurant=restaurant, created_at=date.today())
+
+    return render(request, "restaurant/dashboard.html", {"menus": menus})
+
+
 def res_landing_page(request):
-    return HttpResponse("<h1>this is the restaurant dashbord</h1>")
+    if 'restaurant_id' not in request.session:
+        return redirect('restaurant_login')
+
+    restaurant = Users.objects.get(user_id=request.session['restaurant_id'])
+    thalis = Thali.objects.filter(restaurant=restaurant, created_at=date.today())
+
+    return render(request, "restaurant/dashboard.html", {
+        "restaurant": restaurant,
+        "thalis": thalis
+    })
+
+
+# def res_landing_page(request):
+#     if 'restaurant_id' not in request.session:
+#         return redirect('restaurant_login')
+
+#     restaurant = Users.objects.get(user_id=request.session['restaurant_id'])
+
+#     today = date.today()
+#     menus = Menu.objects.filter(restaurant=restaurant, created_at=today)
+
+#     return render(request, "restaurant/dashboard.html", {
+#         "restaurant": restaurant,
+#         "menus": menus
+#     })
+
+# def res_landing_page(request):
+#     if 'restaurant_id' not in request.session:
+#         return redirect('restaurant_login')
+
+#     restaurant = Users.objects.get(id=request.session['restaurant_id'])
+#     menus = Menu.objects.filter(restaurant=restaurant, created_at=date.today())
+
+#     return render(request, "restaurant/dashboard.html", {"menus": menus})
+
+# def add_thali(request):
+#     if request.method == "POST":
+#         thali_name = request.POST.get("thali_name")
+#         price = request.POST.get("price")
+#         items = request.POST.getlist("items")  # Multiple items
+
+#         restaurant = Users.objects.get(user_id=request.session['restaurant_id'])
+#         thali = Thali.objects.create(restaurant=restaurant, thali_name=thali_name, price=price)
+
+#         for item in items:
+#             ThaliItem.objects.create(thali=thali, item_name=item)
+
+#         return redirect("res_landing_page")
+#     return render(request, "restaurant/add_thali.html")
+
+
+
+def add_menu_item(request):
+    if request.method == "POST":
+        item_name = request.POST.get("item_name")
+        price = request.POST.get("price")
+        description = request.POST.get("description")
+
+        restaurant = Users.objects.get(user_id = request.session['restaurant_id'])
+
+        Menu.objects.create(
+            restaurant = restaurant,
+            item_name = item_name,
+            price = price,
+            description = description
+        )
+        return redirect("res_landing_page")
+    return redirect("res_landing_page")
+
+def delete_menu_item(request,id):
+    Menu.objects.filter(user_id=id).delete()
+    return redirect("res_landing_page")
+
+
+def logout_view(request):
+    request.session.flush()
+    return redirect("restaurant_login")

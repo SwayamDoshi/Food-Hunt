@@ -1,0 +1,26 @@
+<h2>Add New Thali</h2>
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="thali_name" placeholder="Thali Name" required>
+    <input type="number" step="0.01" name="price" placeholder="Thali Price" required>
+
+    <div id="items">
+        <input type="text" name="items" placeholder="Item 1" required>
+    </div>
+
+    <button type="button" onclick="addItem()">Add Another Item</button>
+    <br><br>
+    <button type="submit">Create Thali</button>
+</form>
+
+<script>
+    function addItem() {
+        const container = document.getElementById("items");
+        const input = document.createElement("input");
+        input.type = "text";
+        input.name = "items";
+        input.placeholder = "Another Item";
+        container.appendChild(document.createElement("br"));
+        container.appendChild(input);
+    }
+</script>

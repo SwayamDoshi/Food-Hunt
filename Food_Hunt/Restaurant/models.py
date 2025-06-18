@@ -17,3 +17,24 @@ class Restaurant(models.Model):
 
     def _str_(self):
         return self.res_name
+
+class Thali(models.Model):
+    restaurant = models.ForeignKey(Users, on_delete=models.CASCADE)
+    thali_name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    created_at = models.DateField(auto_now_add=True)
+
+class ThaliItem(models.Model):
+    thali = models.ForeignKey(Thali, related_name="items", on_delete=models.CASCADE)
+    item_name = models.CharField(max_length=100)
+
+
+class Menu(models.Model):
+    restaurant = models.ForeignKey(Users,on_delete=models.CASCADE)
+    item_name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=6, decimal_places=2)
+    description = models.TextField(default="Provide Description..")
+    created_at = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.item_name} - ₹{self.price}"

@@ -1,0 +1,14 @@
+
+
+<h2>Today's Thalis</h2>
+{% for thali in thalis %}
+    <h3>{{ thali.thali_name }} - ₹{{ thali.price }}</h3>
+    <ul>
+        {% for item in thali.items.all %}
+            <li>{{ item.item_name }}</li>
+        {% endfor %}
+    </ul>
+{% empty %}
+    <p>No thalis added yet.</p>
+{% endfor %}
+
