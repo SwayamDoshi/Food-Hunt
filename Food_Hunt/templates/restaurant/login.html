@@ -1,1 +1,92 @@
-<h3> login hoo gaya</h3>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Restaurant Login</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+    <style>
+        .form-container {
+            background: white;
+            padding: 10px 30px;
+            border-radius: 10px;
+            width: 400px;
+            margin: auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            margin-top: 60px;
+        }
+        .form-container h2 {
+            text-align: center;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            width: 100%;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #218838;
+            cursor : pointer
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="logo">
+            <a href="/">Food Hunt</a>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/about/">About</a>
+            <div class="dropdown">
+                <a href="#">Signup ▾</a>
+                <div class="dropdown-content">
+                    <a href="/users/add-user">As a User</a>
+                    <a href="/restaurant/add-restaurant">As a Restaurant</a>
+                </div>
+            </div>
+            <a href="/users/login">Login</a>
+        </div>
+    </div>
+
+    <div class="form-container">
+        <h2>Restaurant Login</h2>
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="email_ID">Email :</label>
+                <input type="email" name="email_ID" value="{{ email_ID|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password :</label>
+                <input type="password" name="password" >
+            </div>
+
+            <button type="submit">LogIn</button>
+        </form>
+        <br>
+    </div>
+
+    {% if msg %}
+        <p style="color: red;text-align: center;">{{ msg }}</p>       
+    {% endif %}
+    <br><br>
+</body>
+</html>

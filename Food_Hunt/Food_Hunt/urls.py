@@ -23,6 +23,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('users/add-user', user_views.add_user),
     path('restaurant/add-restaurant', restaurant_views.restaurant_signup_view),
+    path('restaurant/login',restaurant_views.login),
+    path('users/login', user_views.login),
+    path('restaurant/landing_page',restaurant_views.res_landing_page),
     path('', user_views.home),
-    path('users/login', user_views.login)
+    path('',restaurant_views.home),
 ]
