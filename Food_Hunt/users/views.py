@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from .models import Users
 
-# Create your views here.
 def add_user(request):
     if request.method == 'POST':
         user_name = request.POST.get('user_name')
@@ -62,8 +61,12 @@ def login(request):
                 context["msg"] = "Email and password required"
 
             userExist = Users.objects.get(email_ID = email_ID)
-
+            print("--------------------hello-------------------")
+            print(userExist)
             if userExist.check_password(password):
+                request.session['user_id'] = userExist.user_id
+                request.session['user_email'] = userExist.email_ID
+                request.session['user_type'] = userExist.user_type
                 return redirect('/')
             else:
                 context["msg"] = "Invalid Credentials"

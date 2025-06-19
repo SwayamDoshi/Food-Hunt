@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>User Login</title>
+    <title>Login</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/navbar.css' %}">
     <style>
@@ -65,7 +65,7 @@
     </div>
 
     <div class="form-container">
-        <h2>User Registration</h2>
+        <h2>Login</h2>
         <form method="POST">
             {% csrf_token %}
 
@@ -88,5 +88,7 @@
         <p style="color: red;text-align: center;">{{msg}}</p>       
     {% endif %}
     <br><br>
+
+
 </body>
 </html>
