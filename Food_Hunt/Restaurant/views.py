@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Restaurant
+from .models import Menu, Item, Restaurant
 from users.models import Users
 from django.contrib.auth.hashers import make_password, check_password
-from datetime import date
+from datetime import timedelta
+from django.contrib import messages
 # from .models import Menu
 
 def restaurant_signup_view(request):
@@ -75,3 +76,62 @@ def home(request):
 def logout_view(request):
     request.session.flush()
     return redirect("restaurant_login")
+
+
+from datetime import timedelta
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Menu, Item, Restaurant
+
+def add_menu(request):
+    if request.method == 'POST':
+        dishName = request.POST.get('dishName')
+        meal_type = request.POST.get('meal_type')
+        price = request.POST.get('price')
+        time_limit = request.POST.get('time_limit')
+        description = request.POST.get('description')
+        picture = request.FILES.get('picture')
+
+        user_id = request.session.get('user_id')
+        if not user_id:
+            messages.error(request, "User not found in session.")
+            return redirect('/restaurant/add_menu')
+
+        try:
+            restaurant = Restaurant.objects.get(user_id=user_id)
+        except Restaurant.DoesNotExist:
+            messages.error(request, "Restaurant not found for this user.")
+            return redirect('/restaurant/add_menu')
+
+        try:
+            hours, minutes, seconds = map(int, time_limit.split(":"))
+            time_limit = timedelta(hours=hours, minutes=minutes, seconds=seconds)
+        except ValueError:
+            messages.error(request, "Invalid time format.")
+            return redirect('/restaurant/add_menu')
+
+        menu = Menu.objects.create(
+            restaurant = restaurant,
+            dishName = dishName,
+            meal_type = meal_type,
+            price = price,
+            time_limit = time_limit,
+            description = description,
+            picture = picture
+        )
+
+        for key in request.POST:
+            if key.startswith("item_name_"):
+                item_name = request.POST.get(key)
+                if item_name:
+                    Item.objects.create(menu=menu, item_name=item_name)
+
+        messages.success(request, "Menu and items added successfully!")
+        return redirect('/restaurant/add_menu')
+
+    return render(request, 'restaurant/add_menu.html')
+
+
+    
+def view_menu(request):
+    return render(request, "restaurant/view_menu.html")

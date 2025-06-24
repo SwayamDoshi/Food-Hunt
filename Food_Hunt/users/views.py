@@ -45,7 +45,6 @@ def add_user(request):
             return render(request, "users/signup.html", context)
     return render(request, "users/signup.html")
 
-
 def login(request):
     if request.method == "POST":
         email_ID = request.POST.get('email_ID')
@@ -68,7 +67,7 @@ def login(request):
                 request.session['user_email'] = userExist.email_ID
                 request.session['user_type'] = userExist.user_type
                 if userExist.user_type == 'restaurant':
-                    return redirect('/dashboard')
+                    return redirect('/restaurant/dashboard')
                 return redirect('/')
             else:
                 context["msg"] = "Invalid Credentials"

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Add Menu</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      font-size: 14px;
+    }
+
+    nav {
+      background-color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 12px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav .logo {
+      font-size: 22px;
+      font-weight: bold;
+      color: #6b4f4f;
+    }
+
+    nav .nav-links a {
+      margin-left: 18px;
+      text-decoration: none;
+      color: #444;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    nav .nav-links a:hover {
+      color: #b88e2f;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin: 25px 0 10px;
+    }
+
+    form {
+      background: #fff;
+      padding: 25px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.05);
+      max-width: 700px;
+      margin: auto;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 7px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    .btn {
+      margin-top: 20px;
+      padding: 8px 18px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .btn:hover {
+      background-color: #45a049;
+    }
+
+    .item-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .item-row input {
+      flex: 1;
+    }
+
+    .remove-btn {
+      background: crimson;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .remove-btn:hover {
+      background: darkred;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #item-fields {
+      margin-top: 20px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: bold;
+      margin-top: 25px;
+    }
+    .error{
+        color : #e60000;
+        font-size : 18px
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">🍽️ FoodHunt</div>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Orders</a>
+      <a href="#">Logout</a>
+    </div>
+  </nav>
+
+  <h2>Add Menu</h2>
+
+  <form method="POST" action="{% url 'add_menu' %}" enctype="multipart/form-data">
+    {% csrf_token %}
+
+
+    <p class="error"></p>
+    <label for="dishName">Dish Name</label>
+    <input type="text" name="dishName" id="dishName" required>
+
+    
+    <label for="meal_type">Meal Type</label>
+    <select name="meal_type" id="meal_type" required>
+        <option value="">Select Meal Type</option>
+        <option value="lunch">Lunch</option>
+        <option value="dinner">Dinner</option>
+    </select>
+    
+    <label for="price">Price</label>
+    <input type="number" step="0.01" name="price" id="price" required>
+
+    <label for="time_limit">Time Limit (hh:mm:ss)</label>
+    <input type="text" name="time_limit" id="time_limit" placeholder="e.g. 02:00:00" required>
+
+    <label for="description">Description</label>
+    <textarea name="description" id="description" rows="3" placeholder="Write about this dish..."></textarea>
+
+    <label for="picture">Upload Picture</label>
+    <input type="file" name="picture" id="picture" accept="image/*">
+
+    <button type="button" class="btn" onclick="showItemFields()">Add Menu</button>
+
+    <div id="item-fields" class="hidden">
+      <div class="section-title">Items</div>
+      <div id="items-container"></div>
+      <button type="button" class="btn" onclick="addItem()">Add Another Item</button>
+      <button type="submit" class="btn">Save All</button>
+    </div>
+  </form>
+
+ <script>
+  let itemIndex = 0;
+
+  function validateMenuFields() {
+    const dishName = document.getElementById("dishName").value.trim();
+    const mealType = document.getElementById("meal_type").value;
+    const price = parseFloat(document.getElementById("price").value);
+    const timeLimit = document.getElementById("time_limit").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const picture = document.getElementById("picture").files[0];
+
+    const timeFormat = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$/;
+
+    const error = document.getElementsByClassName("error")[0];
+    console.log(error);  
+
+
+    if (!dishName) {
+      error.innerHTML = "Please enter Dish Name.";
+      return false;
+    }
+
+    else if (!mealType) {
+      error.innerHTML = "Please select Meal Type.";
+      return false;
+    }
+
+    else if (isNaN(price) || price <= 0) {
+      error.innerHTML = "Please enter a valid Price greater than 0.";
+      return false;
+    }
+
+    else if (!timeLimit || !timeFormat.test(timeLimit)) {
+    error.innerHTML = "Please enter valid Time Limit in hh:mm:ss format.";
+      return false;
+    }
+
+    else if (!description) {
+      error.innerHTML = "Please enter a description.";
+      return false;
+    }
+
+    else if (!picture) {
+        error.innerHTML = "Please upload a picture.";
+      return false;
+    }
+    else {
+        error.innerHTML = "";
+    }
+
+    return true;
+  }
+
+  function showItemFields() {
+    if (!validateMenuFields()) return;
+
+    document.getElementById('item-fields').classList.remove('hidden');
+    if (itemIndex === 0) {
+      addItem();
+    }
+  }
+
+  function addItem() {
+    const container = document.getElementById('items-container');
+
+    const row = document.createElement('div');
+    row.classList.add('item-row');
+    row.setAttribute('id', `item-row-${itemIndex}`);
+
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.name = `item_name_${itemIndex}`;
+    input.placeholder = 'Enter item name';
+    input.required = true;
+
+    const removeBtn = document.createElement('button');
+    removeBtn.type = 'button';
+    removeBtn.classList.add('remove-btn');
+    removeBtn.innerText = '❌';
+    removeBtn.onclick = () => {
+      container.removeChild(row);
+    };
+
+    row.appendChild(input);
+    row.appendChild(removeBtn);
+    container.appendChild(row);
+
+    itemIndex++;
+  }
+</script>
+
+
+</body>
+</html>

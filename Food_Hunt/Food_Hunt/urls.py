@@ -27,6 +27,8 @@ urlpatterns = [
     path('users/login', user_views.login),
     path('', user_views.home),
     path('',restaurant_views.home),
-    path('dashboard/', user_views.dashboard),
+    path('restaurant/dashboard/', user_views.dashboard),
+    path('restaurant/add_menu/', restaurant_views.add_menu, name='add_menu'),
+    path('restaurant/view_menu/', restaurant_views.view_menu),
     path('logout/',restaurant_views.logout_view,name="logout_view"),
 ]

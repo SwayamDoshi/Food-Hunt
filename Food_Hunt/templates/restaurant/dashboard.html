@@ -1,3 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Restaurant Dashboard</title>
+  {% load static %}
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-<h1> hi Bishu Bandru!! <h1>
-<h2>this is dashboard </h2>
+    body {
+      background-color: #f5f5f5;
+    }
+
+    nav {
+      background-color: #ffffff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav .logo {
+      font-size: 24px;
+      font-weight: bold;
+      color: #6b4f4f;
+    }
+
+    nav .nav-links a {
+      margin-left: 20px;
+      text-decoration: none;
+      color: #444;
+      font-weight: 500;
+    }
+
+    nav .nav-links a:hover {
+      color: #b88e2f;
+    }
+
+    .hero {
+      background: url({% static 'images/restaurant.jpg' %}) no-repeat center center/cover;
+      height: 80vh;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-content {
+      position: relative;
+      color: white;
+      text-align: center;
+    }
+
+    .hero-content h1 {
+      font-size: 48px;
+      margin-bottom: 20px;
+    }
+
+    .hero-content p {
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .btn {
+      padding: 12px 25px;
+      font-size: 16px;
+      font-weight: bold;
+      color: white;
+      background-color: #b88e2f;
+      border: none;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background-color: #a67c2e;
+    }
+
+    @media (max-width: 600px) {
+      .hero-content h1 {
+        font-size: 32px;
+      }
+
+      .hero-content p {
+        font-size: 16px;
+      }
+
+      .btn {
+        font-size: 14px;
+        padding: 10px 20px;
+      }
+
+      .btn-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+  <nav>
+    <div class="logo">🍽️ FoodHunt</div>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#">Orders</a>
+      <a href="#">Logout</a>
+    </div>
+  </nav>
+
+
+  <section class="hero">
+    <div class="hero-content">
+      <h1>Welcome to Your Restaurant Dashboard</h1>
+      <p>Manage your menus with ease</p>
+      <div class="btn-container">
+        <a href="/restaurant/add_menu" class="btn">Add Menu</a>
+        <a href="/restaurant/view_menu" class="btn">View Menu</a>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
