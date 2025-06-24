@@ -17,19 +17,3 @@ class Restaurant(models.Model):
 
     def _str_(self):
         return self.res_name
-    
-class Menu(models.Model):
-    MEAL_TYPE_CHOICES = [
-        ('lunch', 'Lunch'),
-        ('dinner', 'Dinner'),
-    ]
-
-    menuid = models.AutoField(primary_key=True)
-    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='menus')
-    dishName = models.CharField(max_length=255)
-    price = models.DecimalField(max_digits=8, decimal_places=2)
-    meal_type = models.CharField(max_length=10, choices=MEAL_TYPE_CHOICES)
-    time_limit = models.TimeField()
-
-    def _str_(self):
-        return f"{self.dishName} - {self.restaurant.name}"

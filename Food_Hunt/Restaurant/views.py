@@ -75,20 +75,3 @@ def home(request):
 def logout_view(request):
     request.session.flush()
     return redirect("restaurant_login")
-
-# def add_menu_item(request):
-#     if request.method == "POST":
-#         item_name = request.POST.get("item_name")
-#         price = request.POST.get("price")
-#         description = request.POST.get("description")
-
-#         restaurant = Users.objects.get(id = request.session['restaurant_id'])
-
-#         Menu.objects.create(
-#             restaurant = restaurant,
-#             item_name = item_name,
-#             price = price,
-#             description = description
-#         )
-#         return redirect("res_landinng_page")
-#     return redirect("res_landing_page")
