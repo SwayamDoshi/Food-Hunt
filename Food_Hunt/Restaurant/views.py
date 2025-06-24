@@ -69,75 +69,26 @@ def restaurant_signup_view(request):
 
     return render(request, "restaurant/signup.html")
 
-
-
-def login(request):
-    if request.method == "POST":
-        email_ID = request.POST.get('email_ID')
-        password = request.POST.get('password')
-
-        context = {
-            "email_ID": email_ID,
-        }
-
-        try:
-            if email_ID == "" or password == "":
-                context["msg"] = "Email and password required"
-                return render(request, "restaurant/login.html", context)
-
-            user = Users.objects.get(email_ID=email_ID, user_type="restaurant")
-
-            # if check_password(password, user.password):
-            #     # return redirect("/landing_page")
-            #     return redirect("/restaurant/landing_page")
-            if check_password(password, user.password):
-                request.session['restaurant_id'] = user.id
-                return redirect("res_landing_page")
-
-            else:
-                context["msg"] = "Invalid credentials"
-                return render(request, "restaurant/login.html", context)
-
-        except Users.DoesNotExist:
-            context["msg"] = "Restaurant user does not exist"
-            return render(request, "restaurant/login.html", context)
-
-    return render(request, "restaurant/login.html")
-
 def home(request):
     return render(request, "home.html")
-    
-
-def res_landing_page(request):
-    if 'restaurant_id' not in request.session:
-        return redirect('restaurant_login')
-
-    restaurant = Users.objects.get(id=request.session['restaurant_id'])
-    menus = Menu.objects.filter(restaurant=restaurant, created_at=date.today())
-
-    return render(request, "restaurant/dashboard.html", {"menus": menus})
 
 def logout_view(request):
     request.session.flush()
     return redirect("restaurant_login")
 
-def add_menu_item(request):
-    if request.method == "POST":
-        item_name = request.POST.get("item_name")
-        price = request.POST.get("price")
-        description = request.POST.get("description")
+# def add_menu_item(request):
+#     if request.method == "POST":
+#         item_name = request.POST.get("item_name")
+#         price = request.POST.get("price")
+#         description = request.POST.get("description")
 
-        restaurant = Users.objects.get(id = request.session['restaurant_id'])
+#         restaurant = Users.objects.get(id = request.session['restaurant_id'])
 
-        Menu.objects.create(
-            restaurant = restaurant,
-            item_name = item_name,
-            price = price,
-            description = description
-        )
-        return redirect("res_landinng_page")
-    return redirect("res_landing_page")
-
-def delete_menu_item(request,id):
-    Menu.objects.filter(id=id).delete()
-    return redirect("res_landing_page")
+#         Menu.objects.create(
+#             restaurant = restaurant,
+#             item_name = item_name,
+#             price = price,
+#             description = description
+#         )
+#         return redirect("res_landinng_page")
+#     return redirect("res_landing_page")
