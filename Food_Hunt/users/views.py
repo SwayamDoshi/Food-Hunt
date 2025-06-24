@@ -81,7 +81,10 @@ def login(request):
     return render(request, "users/login.html")
 
 def dashboard(request):
-    return render(request, "restaurant/dashboard.html")
+    if request.session.get('user_type') == 'restaurant':
+        return render(request, "restaurant/dashboard.html")
+    else: 
+        return HttpResponse("shu che bhai bohot shana ban raha hai !!")
 
 def home(request):
     return render(request, "home.html")
