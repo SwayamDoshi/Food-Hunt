@@ -61,7 +61,7 @@ def restaurant_signup_view(request):
                 res_picture=res_picture
             )
 
-            return redirect("/restaurant/login")
+            return redirect("/users/login")
 
         except Exception as e:
             context["msg"] = f"An error occurred: {str(e)}"

@@ -27,5 +27,6 @@ urlpatterns = [
     path('users/login', user_views.login),
     path('', user_views.home),
     path('',restaurant_views.home),
+    path('dashboard/', user_views.dashboard),
     path('logout/',restaurant_views.logout_view,name="logout_view"),
 ]

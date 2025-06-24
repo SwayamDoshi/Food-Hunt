@@ -67,6 +67,8 @@ def login(request):
                 request.session['user_id'] = userExist.user_id
                 request.session['user_email'] = userExist.email_ID
                 request.session['user_type'] = userExist.user_type
+                if userExist.user_type == 'restaurant':
+                    return redirect('/dashboard')
                 return redirect('/')
             else:
                 context["msg"] = "Invalid Credentials"
@@ -78,6 +80,8 @@ def login(request):
 
     return render(request, "users/login.html")
 
+def dashboard(request):
+    return render(request, "restaurant/dashboard.html")
 
 def home(request):
     return render(request, "home.html")
