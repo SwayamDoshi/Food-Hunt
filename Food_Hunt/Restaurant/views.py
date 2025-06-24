@@ -5,9 +5,6 @@ from users.models import Users
 from django.contrib.auth.hashers import make_password, check_password
 from datetime import date
 from .models import Menu
-from .models import Thali
-from .models import ThaliItem
-
 
 def restaurant_signup_view(request):
     if request.method == 'POST':
@@ -73,73 +70,56 @@ def restaurant_signup_view(request):
     return render(request, "restaurant/signup.html")
 
 
+
+def login(request):
+    if request.method == "POST":
+        email_ID = request.POST.get('email_ID')
+        password = request.POST.get('password')
+
+        context = {
+            "email_ID": email_ID,
+        }
+
+        try:
+            if email_ID == "" or password == "":
+                context["msg"] = "Email and password required"
+                return render(request, "restaurant/login.html", context)
+
+            user = Users.objects.get(email_ID=email_ID, user_type="restaurant")
+
+            # if check_password(password, user.password):
+            #     # return redirect("/landing_page")
+            #     return redirect("/restaurant/landing_page")
+            if check_password(password, user.password):
+                request.session['restaurant_id'] = user.id
+                return redirect("res_landing_page")
+
+            else:
+                context["msg"] = "Invalid credentials"
+                return render(request, "restaurant/login.html", context)
+
+        except Users.DoesNotExist:
+            context["msg"] = "Restaurant user does not exist"
+            return render(request, "restaurant/login.html", context)
+
+    return render(request, "restaurant/login.html")
+
 def home(request):
     return render(request, "home.html")
-
-def dashboard(request):
-    if 'user_id' not in request.session:
-        return redirect('/users/login')
-
-    current_user = Users.objects.get(user_id=request.session['user_id'])
     
-    if current_user.user_type == 'user':
-        return HttpResponse("You're not authorize to access this page")
-    menus = Menu.objects.filter(restaurant=current_user, created_at=date.today())
-    return render(request, "restaurant/dashboard.html", {"menus": menus})
-
 
 def res_landing_page(request):
-    if 'user_id' not in request.session:
-        return redirect('/users/login')
+    if 'restaurant_id' not in request.session:
+        return redirect('restaurant_login')
 
-    restaurant = Users.objects.get(user_id=request.session['restaurant_id'])
-    thalis = Thali.objects.filter(restaurant=restaurant, created_at=date.today())
+    restaurant = Users.objects.get(id=request.session['restaurant_id'])
+    menus = Menu.objects.filter(restaurant=restaurant, created_at=date.today())
 
-    return render(request, "restaurant/dashboard.html", {
-        "restaurant": restaurant,
-        "thalis": thalis
-    })
+    return render(request, "restaurant/dashboard.html", {"menus": menus})
 
-
-# def res_landing_page(request):
-#     if 'restaurant_id' not in request.session:
-#         return redirect('restaurant_login')
-
-#     restaurant = Users.objects.get(user_id=request.session['restaurant_id'])
-
-#     today = date.today()
-#     menus = Menu.objects.filter(restaurant=restaurant, created_at=today)
-
-#     return render(request, "restaurant/dashboard.html", {
-#         "restaurant": restaurant,
-#         "menus": menus
-#     })
-
-# def res_landing_page(request):
-#     if 'restaurant_id' not in request.session:
-#         return redirect('restaurant_login')
-
-#     restaurant = Users.objects.get(id=request.session['restaurant_id'])
-#     menus = Menu.objects.filter(restaurant=restaurant, created_at=date.today())
-
-#     return render(request, "restaurant/dashboard.html", {"menus": menus})
-
-# def add_thali(request):
-#     if request.method == "POST":
-#         thali_name = request.POST.get("thali_name")
-#         price = request.POST.get("price")
-#         items = request.POST.getlist("items")  # Multiple items
-
-#         restaurant = Users.objects.get(user_id=request.session['restaurant_id'])
-#         thali = Thali.objects.create(restaurant=restaurant, thali_name=thali_name, price=price)
-
-#         for item in items:
-#             ThaliItem.objects.create(thali=thali, item_name=item)
-
-#         return redirect("res_landing_page")
-#     return render(request, "restaurant/add_thali.html")
-
-
+def logout_view(request):
+    request.session.flush()
+    return redirect("restaurant_login")
 
 def add_menu_item(request):
     if request.method == "POST":
@@ -147,7 +127,7 @@ def add_menu_item(request):
         price = request.POST.get("price")
         description = request.POST.get("description")
 
-        restaurant = Users.objects.get(user_id = request.session['user_id'])
+        restaurant = Users.objects.get(id = request.session['restaurant_id'])
 
         Menu.objects.create(
             restaurant = restaurant,
@@ -155,15 +135,9 @@ def add_menu_item(request):
             price = price,
             description = description
         )
-        return redirect("res_landing_page/")
-    return redirect("res_landing_page/")
-
-
-def delete_menu_item(request,id):
-    Menu.objects.filter(user_id=id).delete()
+        return redirect("res_landinng_page")
     return redirect("res_landing_page")
 
-
-def logout_view(request):
-    request.session.flush()
-    return redirect('/users/login')
+def delete_menu_item(request,id):
+    Menu.objects.filter(id=id).delete()
+    return redirect("res_landing_page")
