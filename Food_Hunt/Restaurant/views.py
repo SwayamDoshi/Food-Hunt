@@ -4,7 +4,7 @@ from .models import Restaurant
 from users.models import Users
 from django.contrib.auth.hashers import make_password, check_password
 from datetime import date
-from .models import Menu
+# from .models import Menu
 
 def restaurant_signup_view(request):
     if request.method == 'POST':

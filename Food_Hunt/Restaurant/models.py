@@ -18,13 +18,18 @@ class Restaurant(models.Model):
     def _str_(self):
         return self.res_name
     
+class Meal(models.Model):
+    MEAL_TYPE_CHOICES = [
+        ('lunch', 'Lunch'),
+        ('dinner', 'Dinner'),
+    ]
 
-class Menu(models.Model):
-    restaurant = models.ForeignKey(Users,on_delete=models.CASCADE)
-    item_name = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
-    description = models.TextField(default="Provide Description..")
-    created_at = models.DateField(auto_now_add=True)
+    menuid = models.AutoField(primary_key=True)
+    restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='menus')
+    dishName = models.CharField(max_length=255)
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+    meal_type = models.CharField(max_length=10, choices=MEAL_TYPE_CHOICES)
+    time_limit = models.TimeField()
 
-    def __str__(self):
-        return f"{self.item_name} - ₹{self.price}"
+    def __str__(self):  # ✅ fixed here
+        return f"{self.dishName} - {self.restaurant.name}"
