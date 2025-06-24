@@ -18,7 +18,7 @@ class Restaurant(models.Model):
     def _str_(self):
         return self.res_name
     
-class Meal(models.Model):
+class Menu(models.Model):
     MEAL_TYPE_CHOICES = [
         ('lunch', 'Lunch'),
         ('dinner', 'Dinner'),
@@ -31,5 +31,5 @@ class Meal(models.Model):
     meal_type = models.CharField(max_length=10, choices=MEAL_TYPE_CHOICES)
     time_limit = models.TimeField()
 
-    def __str__(self):  # ✅ fixed here
+    def _str_(self):
         return f"{self.dishName} - {self.restaurant.name}"
